@@ -44,9 +44,9 @@ if (!empty($cookie_filter)) {
 if (isset($mock_state_file)) {
     $data = json_decode(file_get_contents($mock_state_file), true);
     $state = $data['content'];
-    $errors = [];
-    $curl_stats = [];
-    $api_cols = [];
+    $errors = array();
+    $curl_stats = array();
+    $api_cols = array();
 } else {
     list($state, $api_cols, $errors, $curl_stats) = NagdashHelpers::get_nagios_host_data($nagios_hosts,
         $unwanted_hosts, $api_type);
@@ -80,9 +80,9 @@ list($host_summary, $service_summary, $down_hosts, $known_hosts, $known_services
         echo "<tr id='host_row' class='{$nagios_host_status_colour[$host['host_state']]}'>";
         $tag = NagdashHelpers::print_tag($host['tag'], count($nagios_hosts));
         echo "<td>{$host['hostname']} " . $tag . " <span class='controls'>";
-        NagdashHelpers::render('controls.php',[ "tag" => $host['tag'],
+        NagdashHelpers::render('controls.php',array( "tag" => $host['tag'],
                                             "host" => $host['hostname'],
-                                            "service" => '']);
+                                            "service" => ''));
         echo "</span></td>";
         echo "<td><blink>{$nagios_host_status[$host['host_state']]}</blink></td>";
         echo "<td>{$host['duration']}</td>";
@@ -131,9 +131,9 @@ if (count($known_hosts) > 0) {
         $tag = NagdashHelpers::print_tag($service['tag'], count($nagios_hosts));
         echo "<tr>";
         echo "<td>{$service['hostname']} " . $tag . " <span class='controls'>";
-        NagdashHelpers::render('controls.php', ["tag" => $service['tag'],
+        NagdashHelpers::render('controls.php', array("tag" => $service['tag'],
                                                 "host" => $service['hostname'],
-                                                "service" => $service['service_name']]);
+                                                "service" => $service['service_name']));
         echo "</span></td>";
         echo "<td class='bold {$nagios_service_status_colour[$service['service_state']]} {$soft_style}'>{$blink_tag}{$service['service_name']}<span class='detail'>{$service['detail']}</span></td>";
         echo "<td>{$service['duration']}</td>";

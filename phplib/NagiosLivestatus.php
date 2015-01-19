@@ -32,10 +32,10 @@ class NagiosLivestatus implements iNagiosConnection {
         $curl_stats = $ret["curl_stats"];
 
         $curl_stats["$hostname:$port"]['objects'] = count($state);
-        $munge = [];
+        $munge = array();
 
         foreach ($state as $host) {
-            $host['services'] = [];
+            $host['services'] = array();
             $munge[$host['name']] = $host;
         }
         $state = $munge;
@@ -57,10 +57,10 @@ class NagiosLivestatus implements iNagiosConnection {
             }
         }
 
-        return ["errors" => false,
+        return array("errors" => false,
                 "details" => $state,
                 "curl_stats" => $curl_stats
-            ];
+            );
     }
 
     /**
@@ -93,13 +93,13 @@ class NagiosLivestatus implements iNagiosConnection {
         return $this->post_to_api("/schedule_downtime", $details);
     }
     public function getColumnMapping() {
-        return [
+        return array(
             'state' => 'state',
             'ack' => 'acknowledged',
             'max_attempts' => 'max_check_attempts',
             'service_name' => 'description',
             'host_name' => 'host_name',
-        ];
+        );
     }
 
     /**
@@ -127,17 +127,17 @@ class NagiosLivestatus implements iNagiosConnection {
         $nagios_url = "{$this->protocol}://{$this->hostname}:{$this->port}/{$this->url}/{$method}";
         if(!$result = file_get_contents($nagios_url, false, $context)) {
             $error = error_get_last();
-            return ["errors" => true,
-                    "details" => "Command {$method} failed! <pre>{$error}</pre>"];
+            return array("errors" => true,
+                    "details" => "Command {$method} failed! <pre>{$error}</pre>");
         } else {
             $return = json_decode($result);
             if ($return->success) {
                 $service = (isset($service)) ? "-> {$service}" : null;
-                return ["errors" => true,
-                        "details" => "Command {$method} succeeded on {$hostname} {$service}"];
+                return array("errors" => true,
+                        "details" => "Command {$method} succeeded on {$hostname} {$service}");
             } else {
-                return ["errors" => true,
-                        "details" => "Command {$method} failed! <pre>{$return->content}</pre>"];
+                return array("errors" => true,
+                        "details" => "Command {$method} failed! <pre>{$return->content}</pre>");
             }
         }
     }

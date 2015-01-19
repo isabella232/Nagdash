@@ -49,13 +49,13 @@ class NagiosAPI implements iNagiosConnection {
         return $this->post_to_api("schedule_downtime", $details);
     }
     public function getColumnMapping() {
-        return [
+        return array(
             'state' => 'current_state',
             'ack' => 'problem_has_been_acknowledged',
             'max_attempts' => 'max_attempts',
             'service_name' => 'service_name',
             'host_name' => 'name',
-        ];
+        );
     }
 
     /**
@@ -83,17 +83,17 @@ class NagiosAPI implements iNagiosConnection {
         $nagios_url = "{$this->protocol}://{$this->hostname}:{$this->port}/{$method}";
         if(!$result = file_get_contents($nagios_url, false, $context)) {
             $error = error_get_last();
-            return ["errors" => true,
-                    "details" => "Command {$method} failed! <pre>{$error}</pre>"];
+            return array("errors" => true,
+                    "details" => "Command {$method} failed! <pre>{$error}</pre>");
         } else {
             $return = json_decode($result);
             if ($return->success) {
                 $service = (isset($service)) ? "-> {$service}" : null;
-                return ["errors" => true,
-                        "details" => "Command {$method} succeeded on {$hostname} {$service}"];
+                return array("errors" => true,
+                        "details" => "Command {$method} succeeded on {$hostname} {$service}");
             } else {
-                return ["errors" => true,
-                        "details" => "Command {$method} failed! <pre>{$return->content}</pre>"];
+                return array("errors" => true,
+                        "details" => "Command {$method} failed! <pre>{$return->content}</pre>");
             }
         }
     }

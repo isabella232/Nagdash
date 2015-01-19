@@ -35,20 +35,20 @@ class NagdashHelpers {
 
         $info = curl_getinfo($ch);
 
-        $ret = ["errors" => false];
+        $ret = array("errors" => false);
         if (curl_errno($ch)) {
             $errmsg = "Attempt to hit API failed, sorry. ";
             $errmsg .= "Curl said: " . curl_error($ch);
-            return ["errors" => true,
-                    "details" => $errmsg ];
+            return array("errors" => true,
+                    "details" => $errmsg );
 
         } elseif ($info['http_code'] != 200) {
             $errmsg = "Attempt to hit API failed, sorry. ";
             $errmsg .= "Curl said: HTTP Status {$info['http_code']}";
-            return ["errors" => true,
-                    "details" => $errmsg ];
+            return array("errors" => true,
+                    "details" => $errmsg );
         } else {
-            $ret["curl_stats"] = ["$hostname:$port" => curl_getinfo($ch)];
+            $ret["curl_stats"] = array("$hostname:$port" => curl_getinfo($ch));
             $ret["details"] = json_decode($json, true);
         }
 
@@ -77,7 +77,7 @@ class NagdashHelpers {
      *
      * Returns nothing but renders the template in place
      */
-    static function render($template, $vars = []) {
+    static function render($template, $vars = array()) {
         extract($vars);
         include $template;
     }
@@ -132,7 +132,7 @@ class NagdashHelpers {
             break;
         }
 
-        return [$state, $mapping, $curl_stats];
+        return array($state, $mapping, $curl_stats);
     }
 
     /**
@@ -146,10 +146,10 @@ class NagdashHelpers {
      *  Returns [$state, $api_cols, $errors, $curl_stats]
      */
     static function get_nagios_host_data($nagios_hosts, $unwanted_hosts, $api_type) {
-        $state  = [];
-        $errors = [];
-        $curl_stats = [];
-        $api_cols = [];
+        $state  = array();
+        $errors = array();
+        $curl_stats = array();
+        $api_cols = array();
         foreach ($nagios_hosts as $host) {
             // Check if the host has been disabled locally
             if (!in_array($host['tag'], $unwanted_hosts)) {
@@ -167,7 +167,7 @@ class NagdashHelpers {
             }
         }
 
-        return [$state, $api_cols, $errors, $curl_stats];
+        return array($state, $api_cols, $errors, $curl_stats);
     }
 
     /**
@@ -272,7 +272,7 @@ class NagdashHelpers {
         ksort($host_summary);
         ksort($service_summary);
 
-        return [$host_summary, $service_summary, $down_hosts, $known_hosts, $known_services, $broken_services];
+        return array($host_summary, $service_summary, $down_hosts, $known_hosts, $known_services, $broken_services);
 
     }
 
